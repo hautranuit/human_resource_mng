@@ -12,89 +12,197 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <Link href="/" className="flex items-center group">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center mr-3 group-hover:shadow-lg transition-all duration-200">
-                  <span className="text-white text-sm font-bold">H</span>
-                </div>
-                <span className="text-xl font-semibold text-gray-900">
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 50%, #f3e8ff 100%)'
+    }}>
+      <nav style={{
+        background: 'rgba(255, 255, 255, 0.95)',
+        backdropFilter: 'blur(10px)',
+        borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+        position: 'sticky',
+        top: 0,
+        zIndex: 50
+      }}>
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          padding: '0 24px'
+        }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            height: '64px'
+          }}>
+            {/* Logo */}
+            <Link href="/" style={{ 
+              display: 'flex', 
+              alignItems: 'center',
+              textDecoration: 'none'
+            }}>
+              <div style={{
+                width: '48px',
+                height: '48px',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                borderRadius: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginRight: '12px',
+                boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)'
+              }}>
+                <svg width="24" height="24" fill="white" viewBox="0 0 24 24">
+                  <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 7C14.5 7 14 7.2 13.6 7.6L11 10.2V15H13V22H11V15H9V10.2L11.4 7.8C11.8 7.4 12.3 7.2 12.8 7.2L18 7.2V9M7 10V8H5V10H7Z"/>
+                </svg>
+              </div>
+              <div>
+                <h1 style={{
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  WebkitBackgroundClip: 'text',
+                  backgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  margin: 0
+                }}>
                   HRMS TimeTrack
-                </span>
-              </Link>
-            </div>
+                </h1>
+                <p style={{
+                  fontSize: '12px',
+                  color: '#666',
+                  margin: 0
+                }}>
+                  Human Resource Management
+                </p>
+              </div>
+            </Link>
             
-            <div className="hidden md:flex items-center space-x-1">
+            {/* Navigation */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Link
                 href="/"
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  router.pathname === '/'
-                    ? 'bg-blue-100 text-blue-700 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                }`}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '8px 16px',
+                  borderRadius: '12px',
+                  textDecoration: 'none',
+                  fontWeight: '600',
+                  fontSize: '14px',
+                  transition: 'all 0.3s ease',
+                  ...(router.pathname === '/' ? {
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    color: 'white',
+                    boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)'
+                  } : {
+                    color: '#666',
+                    background: 'transparent'
+                  })
+                }}
               >
-                <svg className="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 15V9m4 6V9m4 6V9" />
-                </svg>
-                Dashboard
+                📊 Dashboard
               </Link>
               
               <Link
                 href="/reports"
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  router.pathname === '/reports'
-                    ? 'bg-blue-100 text-blue-700 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                }`}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '8px 16px',
+                  borderRadius: '12px',
+                  textDecoration: 'none',
+                  fontWeight: '600',
+                  fontSize: '14px',
+                  transition: 'all 0.3s ease',
+                  ...(router.pathname === '/reports' ? {
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    color: 'white',
+                    boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)'
+                  } : {
+                    color: '#666',
+                    background: 'transparent'
+                  })
+                }}
               >
-                <svg className="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-                Reports
+                📈 Reports
               </Link>
               
-              <div className="flex items-center space-x-3 ml-6 pl-6 border-l border-gray-200">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-medium text-white">
-                      {user?.full_name.split(' ').map(n => n[0]).join('').slice(0, 2)}
-                    </span>
+              {/* User Info */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                marginLeft: '24px',
+                paddingLeft: '24px',
+                borderLeft: '1px solid rgba(0, 0, 0, 0.1)'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                    borderRadius: '12px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    fontSize: '14px'
+                  }}>
+                    {user?.full_name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                   </div>
-                  <div className="hidden lg:block">
-                    <p className="text-sm font-medium text-gray-900">{user?.full_name}</p>
-                    <p className="text-xs text-gray-500">{user?.employee_id}</p>
+                  <div>
+                    <p style={{ 
+                      margin: 0, 
+                      fontWeight: '600', 
+                      fontSize: '14px',
+                      color: '#333'
+                    }}>
+                      {user?.full_name}
+                    </p>
+                    <p style={{ 
+                      margin: 0, 
+                      fontSize: '12px',
+                      color: '#666'
+                    }}>
+                      {user?.employee_id} • {user?.department}
+                    </p>
                   </div>
                 </div>
                 
                 <button
                   onClick={handleLogout}
-                  className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 group"
+                  style={{
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    background: '#fee2e2',
+                    color: '#dc2626',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = '#fecaca'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = '#fee2e2'
+                  }}
                   title="Sign out"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                  </svg>
+                  🚪
                 </button>
               </div>
-            </div>
-
-            {/* Mobile menu button */}
-            <div className="md:hidden flex items-center">
-              <button className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </button>
             </div>
           </div>
         </div>
       </nav>
       
-      <main className="py-6 sm:py-8">{children}</main>
+      <main style={{ padding: '32px 0' }}>{children}</main>
     </div>
   )
 }

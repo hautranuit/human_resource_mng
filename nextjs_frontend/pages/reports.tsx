@@ -73,36 +73,72 @@ export default function Reports() {
   const totalWorkingHours = records.reduce((sum, record) => sum + record.working_hours, 0)
   const workingDays = records.filter(record => record.check_in_time).length
   const forgottenCheckouts = records.filter(record => record.forgot_checkout).length
+
   return (
     <Layout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '0 24px'
+      }}>
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            <svg className="w-8 h-8 inline mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
-            Reports
+        <div style={{ marginBottom: '32px' }}>
+          <h1 style={{
+            fontSize: '32px',
+            fontWeight: 'bold',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            margin: '0 0 8px 0'
+          }}>
+            📈 Reports
           </h1>
-          <p className="text-gray-600">View your monthly attendance and working hours</p>
+          <p style={{ color: '#6b7280', margin: 0, fontSize: '16px' }}>
+            View your monthly attendance and working hours
+          </p>
         </div>
 
         {/* Controls */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-          <div className="flex flex-wrap gap-4 items-center justify-between">
-            <div className="flex flex-wrap gap-4 items-center">
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.95)',
+          borderRadius: '16px',
+          padding: '24px',
+          marginBottom: '24px',
+          boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.2)'
+        }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '16px'
+          }}>
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
               <div>
-                <label htmlFor="month" className="block text-sm font-medium text-gray-700 mb-2">
-                  <svg className="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  Month
+                <label style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  fontWeight: '600',
+                  color: '#374151',
+                  fontSize: '14px'
+                }}>
+                  📅 Month
                 </label>
                 <select
-                  id="month"
                   value={selectedMonth}
                   onChange={(e) => setSelectedMonth(Number(e.target.value))}
-                  className="border border-gray-300 rounded-lg px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-gray-400"
+                  style={{
+                    padding: '8px 12px',
+                    border: '2px solid #e5e7eb',
+                    borderRadius: '8px',
+                    background: 'white',
+                    fontSize: '14px',
+                    outline: 'none',
+                    cursor: 'pointer'
+                  }}
                 >
                   {months.map((month, index) => (
                     <option key={index + 1} value={index + 1}>
@@ -111,18 +147,28 @@ export default function Reports() {
                   ))}
                 </select>
               </div>
-                <div>
-                <label htmlFor="year" className="block text-sm font-medium text-gray-700 mb-2">
-                  <svg className="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Year
+              <div>
+                <label style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  fontWeight: '600',
+                  color: '#374151',
+                  fontSize: '14px'
+                }}>
+                  📆 Year
                 </label>
                 <select
-                  id="year"
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(Number(e.target.value))}
-                  className="border border-gray-300 rounded-lg px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-gray-400"
+                  style={{
+                    padding: '8px 12px',
+                    border: '2px solid #e5e7eb',
+                    borderRadius: '8px',
+                    background: 'white',
+                    fontSize: '14px',
+                    outline: 'none',
+                    cursor: 'pointer'
+                  }}
                 >
                   {Array.from({ length: 5 }, (_, i) => (
                     <option key={2023 + i} value={2023 + i}>
@@ -132,128 +178,262 @@ export default function Reports() {
                 </select>
               </div>
             </div>
-              <button
+            <button
               onClick={downloadExcelReport}
               disabled={downloading}
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center shadow-sm hover:shadow-md transform hover:scale-[1.02]"
+              style={{
+                background: downloading ? '#9ca3af' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                color: 'white',
+                border: 'none',
+                padding: '12px 24px',
+                borderRadius: '8px',
+                fontWeight: '600',
+                cursor: downloading ? 'not-allowed' : 'pointer',
+                transition: 'all 0.3s ease',
+                fontSize: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                opacity: downloading ? 0.7 : 1
+              }}
             >
-              {downloading ? (
-                <>
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Downloading...
-                </>
-              ) : (
-                <>
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                  Download Excel
-                </>
-              )}
+              <span>{downloading ? '⏳' : '📥'}</span>
+              {downloading ? 'Downloading...' : 'Download Excel'}
             </button>
           </div>
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <div className="flex items-center">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Working Days</p>
-                <p className="text-2xl font-bold text-gray-900">{workingDays}</p>
-              </div>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+          gap: '24px',
+          marginBottom: '24px'
+        }}>
+          <div style={{
+            background: 'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)',
+            borderRadius: '16px',
+            padding: '24px',
+            border: '1px solid #93c5fd',
+            textAlign: 'center'
+          }}>
+            <div style={{
+              fontSize: '40px',
+              marginBottom: '8px'
+            }}>
+              📊
             </div>
+            <p style={{
+              fontSize: '14px',
+              color: '#1e40af',
+              fontWeight: '600',
+              margin: '0 0 4px 0'
+            }}>
+              Working Days
+            </p>
+            <p style={{
+              fontSize: '32px',
+              fontWeight: 'bold',
+              color: '#2563eb',
+              margin: 0
+            }}>
+              {workingDays}
+            </p>
           </div>
           
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <div className="flex items-center">
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
-                <svg className="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Total Hours</p>
-                <p className="text-2xl font-bold text-gray-900">{totalWorkingHours.toFixed(1)}h</p>
-              </div>
+          <div style={{
+            background: 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)',
+            borderRadius: '16px',
+            padding: '24px',
+            border: '1px solid #86efac',
+            textAlign: 'center'
+          }}>
+            <div style={{
+              fontSize: '40px',
+              marginBottom: '8px'
+            }}>
+              ⏰
             </div>
+            <p style={{
+              fontSize: '14px',
+              color: '#065f46',
+              fontWeight: '600',
+              margin: '0 0 4px 0'
+            }}>
+              Total Hours
+            </p>
+            <p style={{
+              fontSize: '32px',
+              fontWeight: 'bold',
+              color: '#059669',
+              margin: 0
+            }}>
+              {totalWorkingHours.toFixed(1)}h
+            </p>
           </div>
           
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <div className="flex items-center">
-              <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mr-4">
-                <svg className="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Missed Checkouts</p>
-                <p className="text-2xl font-bold text-gray-900">{forgottenCheckouts}</p>
-              </div>
+          <div style={{
+            background: 'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)',
+            borderRadius: '16px',
+            padding: '24px',
+            border: '1px solid #f87171',
+            textAlign: 'center'
+          }}>
+            <div style={{
+              fontSize: '40px',
+              marginBottom: '8px'
+            }}>
+              ⚠️
             </div>
+            <p style={{
+              fontSize: '14px',
+              color: '#991b1b',
+              fontWeight: '600',
+              margin: '0 0 4px 0'
+            }}>
+              Missed Checkouts
+            </p>
+            <p style={{
+              fontSize: '32px',
+              fontWeight: 'bold',
+              color: '#dc2626',
+              margin: 0
+            }}>
+              {forgottenCheckouts}
+            </p>
           </div>
         </div>
 
         {/* Records Table */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">
-              {months[selectedMonth - 1]} {selectedYear} Records
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.95)',
+          borderRadius: '16px',
+          overflow: 'hidden',
+          boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.2)'
+        }}>
+          <div style={{
+            padding: '24px',
+            borderBottom: '1px solid #f3f4f6',
+            background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)'
+          }}>
+            <h3 style={{
+              fontSize: '20px',
+              fontWeight: 'bold',
+              color: '#1f2937',
+              margin: 0
+            }}>
+              📋 {months[selectedMonth - 1]} {selectedYear} Records
             </h3>
           </div>
           
           {loading ? (
-            <div className="flex justify-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '48px',
+              fontSize: '18px',
+              color: '#6b7280'
+            }}>
+              <span style={{ marginRight: '8px' }}>⏳</span>
+              Loading...
             </div>
           ) : records.length === 0 ? (
-            <div className="text-center py-12">
-              <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              <p className="text-gray-500">No records found for this period</p>
+            <div style={{
+              textAlign: 'center',
+              padding: '48px',
+              color: '#6b7280'
+            }}>
+              <div style={{ fontSize: '48px', marginBottom: '16px' }}>📭</div>
+              <p style={{ margin: 0 }}>No records found for this period</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead style={{ background: '#f9fafb' }}>
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Date
+                    <th style={{
+                      padding: '16px',
+                      textAlign: 'left',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      color: '#6b7280',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px'
+                    }}>
+                      DATE
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Check In
+                    <th style={{
+                      padding: '16px',
+                      textAlign: 'left',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      color: '#6b7280',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px'
+                    }}>
+                      CHECK IN
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Check Out
+                    <th style={{
+                      padding: '16px',
+                      textAlign: 'left',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      color: '#6b7280',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px'
+                    }}>
+                      CHECK OUT
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Hours
+                    <th style={{
+                      padding: '16px',
+                      textAlign: 'left',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      color: '#6b7280',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px'
+                    }}>
+                      HOURS
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
+                    <th style={{
+                      padding: '16px',
+                      textAlign: 'left',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      color: '#6b7280',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px'
+                    }}>
+                      STATUS
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {records.map((record) => (
-                    <tr key={record.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                <tbody>
+                  {records.map((record, index) => (
+                    <tr key={record.id} style={{
+                      borderTop: '1px solid #f3f4f6',
+                      background: index % 2 === 0 ? 'white' : '#fafafa'
+                    }}>
+                      <td style={{
+                        padding: '16px',
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        color: '#1f2937'
+                      }}>
                         {new Date(record.date).toLocaleDateString('en-US', {
                           weekday: 'short',
                           month: 'short',
                           day: 'numeric'
                         })}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td style={{
+                        padding: '16px',
+                        fontSize: '14px',
+                        color: '#6b7280'
+                      }}>
                         {record.check_in_time 
                           ? new Date(record.check_in_time).toLocaleTimeString('en-US', {
                               hour: '2-digit',
@@ -262,7 +442,11 @@ export default function Reports() {
                           : '—'
                         }
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td style={{
+                        padding: '16px',
+                        fontSize: '14px',
+                        color: '#6b7280'
+                      }}>
                         {record.check_out_time 
                           ? new Date(record.check_out_time).toLocaleTimeString('en-US', {
                               hour: '2-digit',
@@ -271,19 +455,36 @@ export default function Reports() {
                           : '—'
                         }
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td style={{
+                        padding: '16px',
+                        fontSize: '14px',
+                        color: '#6b7280'
+                      }}>
                         {record.working_hours.toFixed(2)}h
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                          record.status === 'CHECKED_IN' 
-                            ? 'bg-green-100 text-green-800'
-                            : record.forgot_checkout
-                            ? 'bg-red-100 text-red-800'
-                            : 'bg-gray-100 text-gray-800'
-                        }`}>
-                          {record.status === 'CHECKED_IN' ? 'Working' : 
-                           record.forgot_checkout ? 'Missed Checkout' : 'Completed'}
+                      <td style={{ padding: '16px' }}>
+                        <span style={{
+                          display: 'inline-flex',
+                          padding: '4px 12px',
+                          fontSize: '12px',
+                          fontWeight: '600',
+                          borderRadius: '20px',
+                          ...(record.status === 'CHECKED_IN' ? {
+                            background: '#d1fae5',
+                            color: '#065f46',
+                            border: '1px solid #86efac'
+                          } : record.forgot_checkout ? {
+                            background: '#fee2e2',
+                            color: '#991b1b',
+                            border: '1px solid #f87171'
+                          } : {
+                            background: '#f3f4f6',
+                            color: '#374151',
+                            border: '1px solid #d1d5db'
+                          })
+                        }}>
+                          {record.status === 'CHECKED_IN' ? '🟢 Working' : 
+                           record.forgot_checkout ? '🔴 Missed Checkout' : '✅ Completed'}
                         </span>
                       </td>
                     </tr>
