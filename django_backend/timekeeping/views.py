@@ -5,6 +5,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db.models import Q
+from django.middleware.csrf import get_token
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils.decorators import method_decorator
 from datetime import date, timedelta, datetime
 import calendar
 from openpyxl import Workbook
@@ -12,8 +15,14 @@ from django.http import HttpResponse
 from .models import Employee, TimeRecord, MonthlyReport
 from .serializers import EmployeeSerializer, TimeRecordSerializer, MonthlyReportSerializer
 
+@method_decorator(ensure_csrf_cookie, name='dispatch')
 class AuthViewSet(viewsets.ViewSet):
     permission_classes = []
+    
+    @action(detail=False, methods=['get'])
+    def csrf(self, request):
+        """Get CSRF token"""
+        return Response({'csrfToken': get_token(request)})
     
     @action(detail=False, methods=['post'])
     def login(self, request):
@@ -39,6 +48,25 @@ class AuthViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['post'])
     def logout(self, request):
         logout(request)
+        return Response({'success': True, 'message': 'Logged out successfully'})
+    
+    @action(detail=False, methods=['get'])
+    def status(self, request):
+        """Check authentication status without requiring authentication"""
+        if request.user.is_authenticated:
+            try:
+                employee = Employee.objects.get(user=request.user)
+                return Response({
+                    'authenticated': True,
+                    'employee': EmployeeSerializer(employee).data
+                })
+            except Employee.DoesNotExist:
+                return Response({
+                    'authenticated': False,
+                    'message': 'Employee profile not found'
+                })
+        else:
+            return Response({'authenticated': False})
         return Response({'success': True, 'message': 'Logged out successfully'})
 
 class EmployeeViewSet(viewsets.ModelViewSet):
@@ -109,7 +137,7 @@ class TimeRecordViewSet(viewsets.ModelViewSet):
             return Response({
                 'success': True,
                 'action': 'checked_in',
-                'message': f'Đã check-in lúc {current_time.strftime("%H:%M:%S")}',
+                'message': f'Checked in at {current_time.strftime("%H:%M:%S")}',
                 'record': TimeRecordSerializer(today_record).data
             })
         elif today_record.status == 'CHECKED_IN':
@@ -121,13 +149,13 @@ class TimeRecordViewSet(viewsets.ModelViewSet):
             return Response({
                 'success': True,
                 'action': 'checked_out',
-                'message': f'Đã check-out lúc {current_time.strftime("%H:%M:%S")} - Làm việc {today_record.working_hours} giờ',
+                'message': f'Checked out at {current_time.strftime("%H:%M:%S")} - Worked {today_record.working_hours} hours',
                 'record': TimeRecordSerializer(today_record).data
             })
         else:
             return Response({
                 'success': False,
-                'message': 'Trạng thái không hợp lệ'
+                'message': 'Invalid status'
             }, status=status.HTTP_400_BAD_REQUEST)
     
     @action(detail=False, methods=['get'])
@@ -183,13 +211,13 @@ class ReportViewSet(viewsets.ViewSet):
         # Create workbook
         wb = Workbook()
         ws = wb.active
-        ws.title = f"Báo cáo tháng {month}-{year}"
+        ws.title = f"Report {month}-{year}"
         
         # Headers
         headers = [
-            'Mã nhân viên', 'Họ tên', 'Phòng ban', 'Chức vụ',
-            'Tổng ngày làm việc', 'Tổng giờ làm việc', 'Ngày quên checkout',
-            'Ngày nghỉ', 'Ghi chú'
+            'Employee ID', 'Full Name', 'Department', 'Position',
+            'Total Working Days', 'Total Working Hours', 'Days Forgot Checkout',
+            'Days Off', 'Notes'
         ]
         ws.append(headers)
         
@@ -220,12 +248,12 @@ class ReportViewSet(viewsets.ViewSet):
                 round(total_working_hours, 2),
                 days_forgot_checkout,
                 days_off,
-                f"Báo cáo tháng {month}/{year}"
+                f"Report for {month}/{year}"
             ]
             ws.append(row)
         
         # Create response
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = f'attachment; filename="bao_cao_thang_{month}_{year}.xlsx"'
+        response['Content-Disposition'] = f'attachment; filename="monthly_report_{month}_{year}.xlsx"'
         wb.save(response)
         return response

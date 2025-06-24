@@ -22,6 +22,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
 
+  const initializeApp = async () => {
+    try {
+      // Get CSRF token first
+      await api.get('/auth/csrf/')
+      // Then check if user is authenticated
+      await checkAuth()
+    } catch (error) {
+      console.error('App initialization error:', error)
+      setLoading(false)
+    }
+  }
+
   const login = async (username: string, password: string): Promise<boolean> => {
     try {
       const response = await api.post('/auth/login/', { username, password })
@@ -48,9 +60,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const checkAuth = async () => {
     try {
-      const response = await api.get('/employees/current/')
-      setUser(response.data)
-    } catch (error) {
+      const response = await api.get('/auth/status/')
+      if (response.data.authenticated) {
+        setUser(response.data.employee)
+      } else {
+        setUser(null)
+      }
+    } catch (error: any) {
+      // Handle any errors gracefully
       console.error('Auth check error:', error)
       setUser(null)
     } finally {
@@ -59,7 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    checkAuth()
+    initializeApp()
   }, [])
 
   return (
