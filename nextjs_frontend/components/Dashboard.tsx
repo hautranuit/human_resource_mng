@@ -6,6 +6,8 @@ import Layout from './Layout'
 interface CurrentStatus {
   status: string
   record: any
+  is_admin?: boolean
+  message?: string
 }
 
 export default function Dashboard() {
@@ -13,6 +15,43 @@ export default function Dashboard() {
   const [currentStatus, setCurrentStatus] = useState<CurrentStatus | null>(null)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
+  const [currentTime, setCurrentTime] = useState('')
+
+  // Update current time every second
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date().toLocaleString('en-US', {
+        timeZone: 'Asia/Ho_Chi_Minh',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false  // Force 24-hour format
+      })
+      setCurrentTime(now)
+    }
+
+    // Update immediately
+    updateTime()
+    
+    // Then update every second
+    const timeInterval = setInterval(updateTime, 1000)
+    
+    // Cleanup interval on unmount
+    return () => clearInterval(timeInterval)
+  }, [])
+
+  // Separate useEffect for fetching status to avoid conflicts
+  useEffect(() => {
+    if (user) {
+      fetchCurrentStatus()
+      // Update status every 30 seconds
+      const statusInterval = setInterval(fetchCurrentStatus, 30000)
+      return () => clearInterval(statusInterval)
+    }
+  }, [user])
 
   const fetchCurrentStatus = async () => {
     try {
@@ -41,26 +80,225 @@ export default function Dashboard() {
     }
   }
 
-  useEffect(() => {
-    if (user) {
-      fetchCurrentStatus()
-      const interval = setInterval(fetchCurrentStatus, 30000)
-      return () => clearInterval(interval)
-    }
-  }, [user])
-
   if (!user) return null
 
+  // Check if user is admin
+  const isAdmin = user.employee_id === 'ADMIN001' || (user.department === 'HR' && user.position === 'System Administrator')
+  
+  // If admin, show admin-specific dashboard message
+  if (isAdmin) {
+    return (
+      <Layout>
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          padding: '0 24px'
+        }}>
+          {/* Header */}
+          <div style={{ marginBottom: '40px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
+              <div style={{
+                width: '80px',
+                height: '80px',
+                background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
+                borderRadius: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginRight: '24px',
+                boxShadow: '0 8px 25px rgba(220, 38, 38, 0.4)'
+              }}>
+                <svg width="40" height="40" fill="white" viewBox="0 0 24 24">
+                  <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM16 5.9C17.3 5.9 18.4 6.9 18.4 8.1C18.4 9.2 17.3 10.1 16 10.1S13.6 9.2 13.6 8.1C13.6 6.9 14.7 5.9 16 5.9M8 5.9C9.3 5.9 10.4 6.9 10.4 8.1C10.4 9.2 9.3 10.1 8 10.1S5.6 9.2 5.6 8.1C5.6 6.9 6.7 5.9 8 5.9Z"/>
+                </svg>
+              </div>
+              <div>
+                <h1 style={{
+                  fontSize: '36px',
+                  fontWeight: 'bold',
+                  color: '#1f2937',
+                  margin: '0 0 8px 0'
+                }}>
+                  Welcome back, <span style={{
+                    background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
+                    WebkitBackgroundClip: 'text',
+                    backgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent'
+                  }}>{user.full_name}</span>
+                </h1>
+                <p style={{
+                  fontSize: '18px',
+                  color: '#6b7280',
+                  margin: 0,
+                  display: 'flex',
+                  alignItems: 'center'
+                }}>
+                  🛡️ {user.position} • {user.department} Department
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Admin Message Card */}
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.95)',
+            borderRadius: '20px',
+            padding: '48px',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            textAlign: 'center',
+            marginBottom: '32px'
+          }}>
+            <div style={{
+              fontSize: '80px',
+              marginBottom: '24px'
+            }}>
+              🛡️
+            </div>
+            <h2 style={{
+              fontSize: '32px',
+              fontWeight: 'bold',
+              background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              marginBottom: '16px'
+            }}>
+              Administrator Dashboard
+            </h2>
+            <p style={{
+              fontSize: '18px',
+              color: '#6b7280',
+              marginBottom: '32px',
+              maxWidth: '600px',
+              margin: '0 auto 32px'
+            }}>
+              As a system administrator, you don't need to track time. Use the Admin Dashboard to manage all employee data, view system statistics, and generate comprehensive reports.
+            </p>
+            <div style={{
+              display: 'flex',
+              gap: '16px',
+              justifyContent: 'center',
+              flexWrap: 'wrap'
+            }}>
+              <a
+                href="/admin"
+                style={{
+                  background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
+                  color: 'white',
+                  padding: '16px 32px',
+                  borderRadius: '12px',
+                  textDecoration: 'none',
+                  fontWeight: '600',
+                  fontSize: '16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  boxShadow: '0 4px 12px rgba(220, 38, 38, 0.3)',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  (e.target as HTMLAnchorElement).style.transform = 'translateY(-2px)'
+                  ;(e.target as HTMLAnchorElement).style.boxShadow = '0 8px 25px rgba(220, 38, 38, 0.4)'
+                }}
+                onMouseLeave={(e) => {
+                  (e.target as HTMLAnchorElement).style.transform = 'translateY(0)'
+                  ;(e.target as HTMLAnchorElement).style.boxShadow = '0 4px 12px rgba(220, 38, 38, 0.3)'
+                }}
+              >
+                🛡️ Go to Admin Dashboard
+              </a>
+              <a
+                href="/reports"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.8)',
+                  color: '#374151',
+                  padding: '16px 32px',
+                  borderRadius: '12px',
+                  textDecoration: 'none',
+                  fontWeight: '600',
+                  fontSize: '16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  border: '2px solid #e5e7eb',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  (e.target as HTMLAnchorElement).style.transform = 'translateY(-2px)'
+                  ;(e.target as HTMLAnchorElement).style.borderColor = '#9ca3af'
+                }}
+                onMouseLeave={(e) => {
+                  (e.target as HTMLAnchorElement).style.transform = 'translateY(0)'
+                  ;(e.target as HTMLAnchorElement).style.borderColor = '#e5e7eb'
+                }}
+              >
+                📈 View Reports
+              </a>
+            </div>
+          </div>
+
+          {/* Quick Stats for Admin */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '24px'
+          }}>
+            <div style={{
+              background: 'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)',
+              borderRadius: '16px',
+              padding: '24px',
+              border: '1px solid #93c5fd',
+              textAlign: 'center'
+            }}>
+              <div style={{ fontSize: '40px', marginBottom: '8px' }}>👥</div>
+              <p style={{ fontSize: '14px', color: '#1e40af', fontWeight: '600', margin: '0 0 4px 0' }}>
+                System Role
+              </p>
+              <p style={{ fontSize: '20px', fontWeight: 'bold', color: '#2563eb', margin: 0 }}>
+                Administrator
+              </p>
+            </div>
+            
+            <div style={{
+              background: 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)',
+              borderRadius: '16px',
+              padding: '24px',
+              border: '1px solid #86efac',
+              textAlign: 'center'
+            }}>
+              <div style={{ fontSize: '40px', marginBottom: '8px' }}>🛡️</div>
+              <p style={{ fontSize: '14px', color: '#065f46', fontWeight: '600', margin: '0 0 4px 0' }}>
+                Access Level
+              </p>
+              <p style={{ fontSize: '20px', fontWeight: 'bold', color: '#059669', margin: 0 }}>
+                Full Access
+              </p>
+            </div>
+            
+            <div style={{
+              background: 'linear-gradient(135deg, #fed7aa 0%, #fdba74 100%)',
+              borderRadius: '16px',
+              padding: '24px',
+              border: '1px solid #fb923c',
+              textAlign: 'center'
+            }}>
+              <div style={{ fontSize: '40px', marginBottom: '8px' }}>📊</div>
+              <p style={{ fontSize: '14px', color: '#9a3412', fontWeight: '600', margin: '0 0 4px 0' }}>
+                Time Tracking
+              </p>
+              <p style={{ fontSize: '20px', fontWeight: 'bold', color: '#ea580c', margin: 0 }}>
+                Not Required
+              </p>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    )
+  }
+
   const isCheckedIn = currentStatus?.status === 'CHECKED_IN'
-  const currentTime = new Date().toLocaleString('en-US', {
-    timeZone: 'Asia/Ho_Chi_Minh',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
-  })
 
   return (
     <Layout>
@@ -154,27 +392,61 @@ export default function Dashboard() {
                 }}>
                   <span style={{ fontSize: '18px', fontWeight: '600', color: '#667eea', marginRight: '8px' }}>🕐</span>
                   <span style={{ fontSize: '18px', fontWeight: '600', color: '#4b5563' }}>Current Time</span>
+                  <div style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    backgroundColor: '#10b981',
+                    marginLeft: '12px',
+                    animation: 'pulse 1s infinite'
+                  }}></div>
                 </div>
                 <div style={{
-                  fontSize: '56px',
-                  fontWeight: 'bold',
-                  fontFamily: 'monospace',
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                  WebkitBackgroundClip: 'text',
-                  backgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  marginBottom: '8px',
-                  letterSpacing: '2px'
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginBottom: '8px'
                 }}>
-                  {currentTime.split(' ')[1]}
+                  <div style={{
+                    fontSize: '56px',
+                    fontWeight: 'bold',
+                    fontFamily: 'monospace',
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    WebkitBackgroundClip: 'text',
+                    backgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    letterSpacing: '2px',
+                    textShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                    position: 'relative'
+                  }}>
+                    {currentTime ? currentTime.split(' ')[1] : '--:--:--'}
+                  </div>
                 </div>
                 <div style={{
                   fontSize: '18px',
                   color: '#6b7280'
                 }}>
-                  {currentTime.split(' ')[0]} • Vietnam Time
+                  {currentTime ? currentTime.split(' ')[0] : '--/--/----'} • Vietnam Time
                 </div>
               </div>
+
+              {/* Add CSS for pulse and blink animations */}
+              <style jsx>{`
+                @keyframes pulse {
+                  0%, 100% {
+                    opacity: 1;
+                    transform: scale(1);
+                  }
+                  50% {
+                    opacity: 0.5;
+                    transform: scale(1.1);
+                  }
+                }
+                @keyframes blink-colon {
+                  0%, 50% { opacity: 1; }
+                  51%, 100% { opacity: 0.3; }
+                }
+              `}</style>
 
               {/* Status */}
               <div style={{ marginBottom: '40px' }}>
@@ -237,14 +509,14 @@ export default function Dashboard() {
                 }}
                 onMouseEnter={(e) => {
                   if (!loading) {
-                    e.target.style.transform = 'translateY(-2px)'
-                    e.target.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.2)'
+                    (e.target as HTMLButtonElement).style.transform = 'translateY(-2px)'
+                    ;(e.target as HTMLButtonElement).style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.2)'
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!loading) {
-                    e.target.style.transform = 'translateY(0)'
-                    e.target.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.15)'
+                    (e.target as HTMLButtonElement).style.transform = 'translateY(0)'
+                    ;(e.target as HTMLButtonElement).style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.15)'
                   }
                 }}
               >
@@ -324,7 +596,8 @@ export default function Dashboard() {
                         {currentStatus.record.check_in_time 
                           ? new Date(currentStatus.record.check_in_time).toLocaleTimeString('en-US', {
                               hour: '2-digit',
-                              minute: '2-digit'
+                              minute: '2-digit',
+                              hour12: false
                             })
                           : '—'
                         }
@@ -344,7 +617,8 @@ export default function Dashboard() {
                         {currentStatus.record.check_out_time 
                           ? new Date(currentStatus.record.check_out_time).toLocaleTimeString('en-US', {
                               hour: '2-digit',
-                              minute: '2-digit'
+                              minute: '2-digit',
+                              hour12: false
                             })
                           : '—'
                         }

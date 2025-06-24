@@ -127,6 +127,33 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               >
                 📈 Reports
               </Link>
+
+              {/* Admin Navigation - Show only for admin users */}
+              {(user?.employee_id === 'ADMIN001' || user?.department === 'HR') && (
+                <Link
+                  href="/admin"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '8px 16px',
+                    borderRadius: '12px',
+                    textDecoration: 'none',
+                    fontWeight: '600',
+                    fontSize: '14px',
+                    transition: 'all 0.3s ease',
+                    ...(router.pathname === '/admin' ? {
+                      background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
+                      color: 'white',
+                      boxShadow: '0 4px 12px rgba(220, 38, 38, 0.4)'
+                    } : {
+                      color: '#dc2626',
+                      background: 'transparent'
+                    })
+                  }}
+                >
+                  🛡️ Admin
+                </Link>
+              )}
               
               {/* User Info */}
               <div style={{
@@ -187,10 +214,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     transition: 'all 0.3s ease'
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.background = '#fecaca'
+                    (e.target as HTMLButtonElement).style.background = '#fecaca'
                   }}
                   onMouseLeave={(e) => {
-                    e.target.style.background = '#fee2e2'
+                    (e.target as HTMLButtonElement).style.background = '#fee2e2'
                   }}
                   title="Sign out"
                 >

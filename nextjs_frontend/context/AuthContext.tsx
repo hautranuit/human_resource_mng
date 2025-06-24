@@ -7,6 +7,7 @@ interface User {
   full_name: string
   department: string
   position: string
+  is_admin?: boolean
 }
 
 interface AuthContextType {
@@ -38,7 +39,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const response = await api.post('/auth/login/', { username, password })
       if (response.data.success) {
-        setUser(response.data.employee)
+        const employee = response.data.employee
+        // Add admin flag for admin users
+        employee.is_admin = employee.employee_id === 'ADMIN001' || employee.department === 'HR'
+        setUser(employee)
         return true
       }
       return false
@@ -62,7 +66,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const response = await api.get('/auth/status/')
       if (response.data.authenticated) {
-        setUser(response.data.employee)
+        const employee = response.data.employee
+        // Add admin flag for admin users
+        employee.is_admin = employee.employee_id === 'ADMIN001' || employee.department === 'HR'
+        setUser(employee)
       } else {
         setUser(null)
       }

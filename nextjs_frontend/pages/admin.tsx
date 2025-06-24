@@ -1,25 +1,9 @@
 import { useAuth } from '@/context/AuthContext'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import AdminDashboard from '@/components/AdminDashboard'
 import Login from '@/components/Login'
-import Dashboard from '@/components/Dashboard'
 
-export default function Home() {
+export default function AdminPage() {
   const { user, loading } = useAuth()
-  const router = useRouter()
-
-  // Redirect admin users to admin dashboard on first login
-  useEffect(() => {
-    if (user && !loading) {
-      const isAdmin = user.employee_id === 'ADMIN001' || (user.department === 'HR' && user.position === 'System Administrator')
-      if (isAdmin && router.pathname === '/') {
-        // Small delay to ensure smooth transition
-        setTimeout(() => {
-          router.push('/admin')
-        }, 1000)
-      }
-    }
-  }, [user, loading, router])
 
   if (loading) {
     return (
@@ -57,9 +41,9 @@ export default function Home() {
     )
   }
 
-  return (
-    <div style={{ minHeight: '100vh' }}>
-      {user ? <Dashboard /> : <Login />}
-    </div>
-  )
+  if (!user) {
+    return <Login />
+  }
+
+  return <AdminDashboard />
 }

@@ -437,7 +437,8 @@ export default function Reports() {
                         {record.check_in_time 
                           ? new Date(record.check_in_time).toLocaleTimeString('en-US', {
                               hour: '2-digit',
-                              minute: '2-digit'
+                              minute: '2-digit',
+                              hour12: false
                             })
                           : '—'
                         }
@@ -450,7 +451,8 @@ export default function Reports() {
                         {record.check_out_time 
                           ? new Date(record.check_out_time).toLocaleTimeString('en-US', {
                               hour: '2-digit',
-                              minute: '2-digit'
+                              minute: '2-digit',
+                              hour12: false
                             })
                           : '—'
                         }

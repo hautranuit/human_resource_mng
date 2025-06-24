@@ -98,12 +98,12 @@ export default function Login() {
                 outline: 'none'
               }}
               onFocus={(e) => {
-                e.target.style.borderColor = '#667eea'
-                e.target.style.boxShadow = '0 0 0 3px rgba(102, 126, 234, 0.1)'
+                (e.target as HTMLInputElement).style.borderColor = '#667eea'
+                ;(e.target as HTMLInputElement).style.boxShadow = '0 0 0 3px rgba(102, 126, 234, 0.1)'
               }}
               onBlur={(e) => {
-                e.target.style.borderColor = '#e0e0e0'
-                e.target.style.boxShadow = 'none'
+                (e.target as HTMLInputElement).style.borderColor = '#e0e0e0'
+                ;(e.target as HTMLInputElement).style.boxShadow = 'none'
               }}
             />
           </div>
@@ -133,12 +133,12 @@ export default function Login() {
                 outline: 'none'
               }}
               onFocus={(e) => {
-                e.target.style.borderColor = '#667eea'
-                e.target.style.boxShadow = '0 0 0 3px rgba(102, 126, 234, 0.1)'
+                (e.target as HTMLInputElement).style.borderColor = '#667eea'
+                ;(e.target as HTMLInputElement).style.boxShadow = '0 0 0 3px rgba(102, 126, 234, 0.1)'
               }}
               onBlur={(e) => {
-                e.target.style.borderColor = '#e0e0e0'
-                e.target.style.boxShadow = 'none'
+                (e.target as HTMLInputElement).style.borderColor = '#e0e0e0'
+                ;(e.target as HTMLInputElement).style.boxShadow = 'none'
               }}
             />
           </div>
@@ -176,14 +176,14 @@ export default function Login() {
             }}
             onMouseEnter={(e) => {
               if (!loading) {
-                e.target.style.transform = 'translateY(-2px)'
-                e.target.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.4)'
+                (e.target as HTMLButtonElement).style.transform = 'translateY(-2px)'
+                ;(e.target as HTMLButtonElement).style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.4)'
               }
             }}
             onMouseLeave={(e) => {
               if (!loading) {
-                e.target.style.transform = 'translateY(0)'
-                e.target.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.4)'
+                (e.target as HTMLButtonElement).style.transform = 'translateY(0)'
+                ;(e.target as HTMLButtonElement).style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.4)'
               }
             }}
           >
