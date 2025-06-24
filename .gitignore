@@ -1,0 +1,54 @@
+# --------------------
+# Node.js / Next.js
+# --------------------
+node_modules/
+.next/
+out/
+dist/
+.env.local
+.env.development
+.env.production
+*.log
+
+# npm/yarn/pnpm logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --------------------
+# Python / Django
+# --------------------
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.db
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+
+# Django static/media (if generated)
+staticfiles/
+media/
+
+# Django env
+.env
+.env.*
+
+# VSCode settings
+.vscode/
+
+# IDEs
+.idea/
+*.swp
+
+# Mac/Linux system files
+.DS_Store
+Thumbs.db
+
+# Python virtual environment
+venv/
+ENV/
+env/
